@@ -15,9 +15,10 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         await connectToDatabase();
 
-        const user = (await User.findOne({
-          email: credentials?.email,
-        })) as IUser | null;
+      const user = await User.findOne({
+  email: credentials?.email,
+}) as IUser & { _id: string } | null;
+
 
         if (!user) {
           throw new Error("User not found");
@@ -32,11 +33,12 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid password");
         }
 
-        return {
-          id: user._id as unknown as string,
-          name: user.name,
-          email: user.email,
-        };
+      return {
+  id: user._id.toString(),
+  name: user.name,
+  email: user.email,
+};
+
       },
     }),
   ],
