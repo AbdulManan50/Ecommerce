@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 
 import bcrypt from "bcrypt";
 import { connectToDatabase } from "./db";
@@ -15,6 +16,11 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
 
     CredentialsProvider({
@@ -69,12 +75,28 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
+    async signIn({ user, account }) {
+      // ✅ Google signup
+      if (account?.provider === "google" || account?.provider === "github") {
+        await connectToDatabase();
+        const existingUser = await User.findOne({ email: user.email });
+        if (!existingUser) {
+          await User.create({
+            name: user.name,
+            email: user.email,
+            image: user.image,
+            googleId:
+              account.provider === "google"
+                ? account.providerAccountId
+                : undefined,
+            githubId:
+              account.provider === "github"
+                ? account.providerAccountId
+                : undefined,
+          });
+        }
       }
-      return token;
+      return true;
     },
 
     async session({ session, token }) {
