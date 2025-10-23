@@ -11,7 +11,7 @@ export interface signupData {
   password: string;
 }
 
-// login services
+
 
 export const loginUser = async (data: loginData) => {
   try {
@@ -25,12 +25,11 @@ export const loginUser = async (data: loginData) => {
 
 // signup services
 
-export const signupUser = async (data: signupData) => {
-  try {
-    const response = await api.post("/api/auth/signup", data);
-    response.data;
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error signing up");
-  }
+export const signupUser = async (data: {
+  name: string;
+  email: string;
+  password: string;
+}) => {
+  const response = await api.post("/api/auth/signup", data);
+  return response.data;
 };

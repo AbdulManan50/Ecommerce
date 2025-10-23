@@ -1,7 +1,8 @@
 "use client";
-import api from "@/lib/axios";
-import Link from "next/link";
 import { useState } from "react";
+import Link from "next/link";
+import { signupUser } from "@/services/authServices";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
   const [name, setname] = useState("");
@@ -10,22 +11,29 @@ export default function SignupPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const Router = useRouter();
 
   const handelSumbit = async (e: React.FormEvent) => {
+    e.preventDefault(); // prevent page reload
     setLoading(true);
     setMessage("");
     setError("");
+
     try {
-      const res = await api.post("/api/auth/signup", { name, email, password });
+      const res = await signupUser({ name, email, password });
       console.log("✅ Signup Success:", res);
-      setLoading(false);
       setMessage("Signed up successfully!");
-    } catch (error) {
+      Router.push("/login");
+    } catch (err: any) {
+      console.error("❌ Signup Failed:", err);
+      setError(
+        err.response?.data?.message || "Failed to sign up. Please try again."
+      );
+    } finally {
       setLoading(false);
-      console.error("❌ Signup Failed:", error);
-      setMessage("Failed to sign up. Please try again.");
     }
   };
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Left Side */}
@@ -90,10 +98,16 @@ export default function SignupPage() {
 
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-all duration-200"
+              disabled={loading}
+              className={`w-full ${
+                loading ? "bg-green-400" : "bg-green-600 hover:bg-green-700"
+              } text-white font-semibold py-3 rounded-lg transition-all duration-200`}
             >
-              Sign Up
+              {loading ? "Signing Up..." : "Sign Up"}
             </button>
+
+            {message && <p className="text-green-600 text-center">{message}</p>}
+            {error && <p className="text-red-600 text-center">{error}</p>}
 
             <p className="text-center text-sm mt-4 text-gray-600">
               Already have an account?{" "}

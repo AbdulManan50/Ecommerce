@@ -1,9 +1,11 @@
 "use client";
-import { loginUser } from "@/services/authServices";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -17,18 +19,25 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await loginUser({ email, password });
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
 
-      // ✅ Handle successful response
-      console.log("✅ Login Success:", res);
-      setLoading(false);
+      if (result?.error) {
+        setError("Invalid credentials. Please try again.");
+        setLoading(false);
+        return;
+      }
+
       setMessage("Logged in successfully!");
-    } catch (err: any) {
+      setLoading(false);
+      router.push("/");
+    } catch (err) {
       console.error("❌ Login Failed:", err);
       setLoading(false);
-      setError(
-        err.response?.data?.message || "Invalid credentials. Please try again."
-      );
+      setError("Something went wrong. Please try again.");
     }
   };
 
@@ -63,8 +72,7 @@ export default function LoginPage() {
             </p>
           )}
 
-          <form noValidate  onSubmit={handleLogin} className="space-y-5">
-            
+          <form noValidate onSubmit={handleLogin} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Email Address
