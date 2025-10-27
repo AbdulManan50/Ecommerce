@@ -1,8 +1,9 @@
-import { Heart, Search, ShoppingCart, User } from "lucide-react";
+import { Heart, Menu, Search, ShoppingCart, User, X } from "lucide-react";
 import React, { useState } from "react";
 
-const Header = () => {
-      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const Header = ({ cartCount }: any) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div>
       {/* Header */}
@@ -66,11 +67,9 @@ const Header = () => {
               </button>
               <button className="relative p-2 hover:bg-slate-100 rounded-lg transition">
                 <ShoppingCart className="w-5 h-5 text-slate-600" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-pink-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                    {cartCount}
-                  </span>
-                )}
+                <span className="absolute -top-1 -right-1 bg-pink-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {cartCount}
+                </span>
               </button>
               <button
                 className="md:hidden p-2 hover:bg-slate-100 rounded-lg transition"

@@ -1,11 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import {
-  ShoppingCart,
-  Menu,
-  X,
-  Search,
-  User,
   Heart,
   Star,
   TrendingUp,
@@ -20,9 +15,11 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
+import Header from "./Component/Header";
+import { UserReview } from "@/Data/ProductsData";
+import Footer from "./Component/Footer";
 
 export default function EcommerceHomepage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
   const latestProducts = [
@@ -95,35 +92,9 @@ export default function EcommerceHomepage() {
     },
   ];
 
-  const reviews = [
-    {
-      id: 1,
-      name: "Ahmed Khan",
-      rating: 5,
-      text: "Amazing products! Fast delivery aur quality bilkul perfect hai.",
-      avatar: "👨",
-    },
-    {
-      id: 2,
-      name: "Fatima Ali",
-      rating: 5,
-      text: "Best shopping experience! Highly recommended for everyone.",
-      avatar: "👩",
-    },
-    {
-      id: 3,
-      name: "Hassan Raza",
-      rating: 4,
-      text: "Great collection aur prices bhi reasonable hain. Will order again!",
-      avatar: "👨‍💼",
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
-    
-
-      {/* Hero Banner */}
+    <div className="bg-[#F8FAFC]">
+      <Header cartCount={cartCount} />
       <section className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-pink-600 to-purple-700 text-white">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
@@ -384,7 +355,7 @@ export default function EcommerceHomepage() {
             <p className="text-slate-600">Real reviews from real customers</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {reviews.map((review) => (
+            {UserReview.map((review) => (
               <div
                 key={review.id}
                 className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition border border-slate-200"
@@ -417,108 +388,6 @@ export default function EcommerceHomepage() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white pt-12 pb-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                  E
-                </div>
-                <span className="text-2xl font-bold">ShopHub</span>
-              </div>
-              <p className="text-slate-400 mb-4">
-                Your one-stop shop for amazing products at unbeatable prices.
-              </p>
-              <div className="flex space-x-4">
-                <button className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-purple-600 transition">
-                  <Facebook className="w-5 h-5" />
-                </button>
-                <button className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-pink-600 transition">
-                  <Instagram className="w-5 h-5" />
-                </button>
-                <button className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition">
-                  <Twitter className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li>
-                  <a href="#" className="hover:text-white transition">
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition">
-                    Products
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition">
-                    Categories
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition">
-                    Deals
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg mb-4">Customer Service</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li>
-                  <a href="#" className="hover:text-white transition">
-                    Contact Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition">
-                    Shipping Info
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition">
-                    Returns
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition">
-                    FAQ
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg mb-4">Contact Info</h3>
-              <ul className="space-y-3 text-slate-400">
-                <li className="flex items-start space-x-3">
-                  <MapPin className="w-5 h-5 mt-1 flex-shrink-0" />
-                  <span>123 Main Street, Karachi, Pakistan</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5" />
-                  <span>+92 300 1234567</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5" />
-                  <span>info@shophub.com</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-slate-800 pt-6 text-center text-slate-400">
-            <p>
-              &copy; 2025 ShopHub. All rights reserved. Made with ❤️ in Pakistan
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
